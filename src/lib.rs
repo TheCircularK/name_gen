@@ -1,37 +1,33 @@
-pub mod prefix;
-pub mod connector;
-pub mod infix;
-pub mod suffix;
-
-pub enum NameRace {
+pub mod phonemes;
+pub mod utils;
+pub enum Race {
     Human,
-    RegalHuman,
-    EvilHuman,
-    Dwarven,
-    Elven,
+    Dwarf,
+    Elf,
 }
 
-pub enum ComponentSize {
-    Default,
+pub enum NameLength {
     Short,
     Medium,
     Long,
-    Random,
 }
 
-pub trait PartProvider {
-    fn get_part(&self) -> &str;
+pub enum NameType {
+    FirstName,
+    LastName,
 }
 
-pub fn generate_name() -> String { // parameter not used until human generator works
-    let size: ComponentSize = ComponentSize::Default;
-
-    let prefix = prefix::human::get_prefix(&size);
-    let infix = infix::human::get_infix(&size);
-    let suffix = suffix::human::get_suffix(&size);
-
-    let name = format!("{}{}{}", prefix, infix, suffix);
-
-    return name;
+pub enum Gender {
+    Male,
+    Female,
 }
 
+pub fn generate_name(race: Race, gender: Gender, size: NameLength) -> String {
+    let name = match race {
+        Race::Human => phonemes::human::get_name(&gender, &size),
+        Race::Dwarf => phonemes::dwarf::get_name(&gender, &size),
+        Race::Elf => phonemes::elf::get_name(&gender, &size),
+    };
+
+    name
+}
